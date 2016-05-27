@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>yii2.html</title>
+
+</head>
+
+<body>
+
+<p><link href="markdown.css" rel="stylesheet"></p>
+
+<h1>yii2 学习笔记</h1>
+
+<h2>修改默认控制器</h2>
+
+<blockquote>
+  <p>'defaultRoute' => 'welcome' ,//(在config配置文件中$config下添加)</p>
+</blockquote>
+
+<h2>一些常用的文件类库</h2>
+
+<blockquote>
+  <p>yii\Helpers\Html;//这个类库 提供一些html格式文件输出</p>
+
+<p>yii\widgets\ActiveForm;//这个类库 提供了form表单的提交等</p>
+</blockquote>
+
+<h2>控制器生命周期</h2>
+
+<p>处理一个请求时，应用主体 会根据请求路由创建一个控制器，控制器经过以下生命周期来完成请求：</p>
+
+<ul>
+<li><p>在控制器创建和配置后，yii\base\Controller::init() 方法会被调用。</p></li>
+<li><p>控制器根据请求操作ID创建一个操作对象:</p></li>
+</ul>
+
+<p>1 如果操作ID没有指定，会使用yii\base\Controller::defaultAction默认操作ID；</p>
+
+<p>2 如果在yii\base\Controller::actions()找到操作ID，会创建一个独立操作；</p>
+
+<p>3 如果操作ID对应操作方法，会创建一个内联操作；</p>
+
+<p>4 否则会抛出yii\base\InvalidRouteException异常。</p>
+
+<ul>
+<li>控制器按顺序调用应用主体、模块（如果控制器属于模块）、控制器的 beforeAction() 方法；</li>
+</ul>
+
+<p>1 如果任意一个调用返回false，后面未调用的beforeAction()会跳过并且操作执行会被取消； action execution will be cancelled.</p>
+
+<p>2 默认情况下每个 beforeAction() 方法会触发一个 beforeAction 事件，在事件中你可以追加事件处理操作；</p>
+
+<ul>
+<li>控制器执行操作:</li>
+</ul>
+
+<p>1 请求数据解析和填入到操作参数；</p>
+
+<ul>
+<li>控制器按顺序调用控制器、模块（如果控制器属于模块）、应用主体的 afterAction() 方法；</li>
+</ul>
+
+<p>1 默认情况下每个 afterAction() 方法会触发一个 afterAction 事件，在事件中你可以追加事件处理操作；</p>
+
+<ul>
+<li>应用主体获取操作结果并赋值给响应.</li>
+</ul>
+
+<h2>收发邮件</h2>
+
+<p>Yii 支持组成和发送电子邮件。然而，该框架提供的只有内容组成功能和基本接口。实际的邮件发送机制可以通过扩展提供， 因为不同的项目可能需要不同的实现方式，它通常取决于外部服务和库。</p>
+
+<p>大多数情况下你可以使用 yii2-swiftmailer 官方扩展。</p>
+
+<h3>配置</h3>
+
+<p>件组件配置取决于你所使用的扩展。一般来说你的应用程序配置应如下：</p>
+
+<p><code>
+ return [
+    //....
+    'components' =&gt; [
+        'mailer' =&gt; [
+            'class' =&gt; 'yii\swiftmailer\Mailer',
+        ],
+    ],
+];
+</code></p>
+
+<h3>基本用法</h3>
+
+<p>一旦 “mailer” 组件被配置，可以使用下面的代码来发送邮件：</p>
+
+<p><code>
+Yii::$app-&gt;mailer-&gt;compose()
+    -&gt;setFrom('from@domain.com')
+    -&gt;setTo('to@domain.com')
+    -&gt;setSubject('Message subject')
+    -&gt;setTextBody('Plain text content')
+    -&gt;setHtmlBody('&lt;b&gt;HTML content&lt;/b&gt;')
+    -&gt;send();
+</code></p>
+
+<h3>撰写邮件内容</h3>
+
+<p>Yii 允许通过特殊的视图文件来撰写实际的邮件内容。默认情况下，这些文件应该位于 “@app/mail” 路径。</p>
+
+<p>一个邮件视图内容的例子：</p>
+
+<blockquote>
+  <p><?php
+use yii\helpers\Html;</p>
+
+<p>use yii\helpers\Url;</p>
+
+<p>/* @var $this \yii\web\View view component instance */</p>
+
+<p>/* @var $message \yii\mail\BaseMessage instance of newly created mail message */</p>
+
+<p>?></p>
+
+<h2>This message allows you to visit our site home page by one click</h2>
+
+<p><?= Html::a('Go to home page', Url::home('http')) ?></p>
+</blockquote>
+
+<p>为了通过视图文件撰写正文可传递视图名称到 compose() 方法中：</p>
+
+<p><code>
+Yii::$app-&gt;mailer-&gt;compose('home-link') // 渲染一个视图作为邮件内容
+    -&gt;setFrom('from@domain.com')
+    -&gt;setTo('to@domain.com')
+    -&gt;setSubject('Message subject')
+    -&gt;send();
+</code></p>
+
+<h3>yii2 发送邮件（最全配置文件）</h3>
+
+<p>1 在配置文件main-local.php components=>[]里面配置</p>
+
+<p><code>
+"mailer" =&gt; [
+    "class" =&gt; "yii\swiftmailer\Mailer",
+    "useFileTransport" =&gt;false,//这句一定有，false发送邮件，true只是生成邮件在runtime文件夹下，不发邮件
+    "transport" =&gt; [
+    "class" =&gt; "Swift_SmtpTransport",
+    "host" =&gt; "smtp.163.com",  //每种邮箱的host配置不一样
+    "username" =&gt; "15618380091@163.com",
+    "password" =&gt; "*******",
+    "port" =&gt; "25",
+    "encryption" =&gt; "tls",
+    ],
+    "messageConfig"=&gt;[
+    "charset"=&gt;"UTF-8",
+    "from"=&gt;["15618380091@163.com"=&gt;"admin"]
+    ],
+],
+</code></p>
+
+<p>2 controller控制器中 代码：</p>
+
+<p><code>
+$mail= Yii::$app-&gt;mailer-&gt;compose();
+$mail-&gt;setTo('***********@qq.com');
+$mail-&gt;setSubject("邮件测试");
+//$mail-&gt;setTextBody('zheshisha ');   //发布纯文字文本
+$mail-&gt;setHtmlBody("&lt;br&gt;问我我我我我");    //发布可以带html标签的文本
+if($mail-&gt;send())
+    echo "success";
+else
+    echo "failse";
+die();
+</code>
+ok，这样就可以发送邮件了</p>
+
+<p>如需加载模板 把$mail= Yii::$app->mailer->compose(); </p>
+
+<p>修改成 $mail= Yii::$app->mailer->compose('xiaoma',['aa'=>222]); </p>
+
+<p>注:aa是想xiaoma.php里面传递的参数。</p>
+
+<p>3 邮件模板 xiaoma.php里面的代码 ：</p>
+
+<p><code>
+&lt;?php
+use yii\helpers\Html;
+/* @var $this yii\web\View */
+/* @var $user common\models\User */
+$resetLink = Yii::$app-&gt;urlManager-&gt;createAbsoluteUrl(['site/reset-password', 'token' =&gt; $aa]);
+?&gt;
+&lt; a href="#" &gt;&lt;?php echo $resetLink ?&gt;&lt;/a&gt;
+</code></p>
+
+<p>3 加载模板的邮件代码：</p>
+
+<p><code>
+$mail= Yii::$app-&gt;mailer-&gt;compose('xiaoma',['aa'=&gt;222]);
+       $mail-&gt;setTo('1401619705@qq.com');
+       $mail-&gt;setSubject("邮件测试");
+       $mail-&gt;setTextBody('zheshisha ');
+       if($mail-&gt;send())
+           echo "success";
+       else
+           echo "failse";
+     die();
+</code></p>
+
+<p>通过以上配置就ok了</p>
+
+<h2>yii2高级模板中自定义类库</h2>
+
+<ul>
+<li>我定义的一般在common这个目录下创建一个文件夹，如：</li>
+</ul>
+
+<blockquote>
+  <p>common\libs;</p>
+
+<p>common\libs\Tools.php;</p>
+</blockquote>
+
+<ul>
+<li>在controller中调用刚刚创建的这个类库，如：</li>
+</ul>
+
+<blockquote>
+  <p>use common\libs\Tools;  //这个是命名空间的调用</p>
+
+<p>Tools::test();  //控制器中的调用，这个是静态方法</p>
+</blockquote>
+
+<h2>yii2 修改布局(layout)</h2>
+
+<ul>
+<li>方案1:控制器内成员变量</li>
+</ul>
+
+<blockquote>
+  <p>public $layout = false; //不使用布局</p>
+
+<p>public $layout = "main"; //设置使用的布局文件</p>
+</blockquote>
+
+<ul>
+<li>方案2：控制器成员方法内</li>
+</ul>
+
+<blockquote>
+  <p>$this->layout = false; //不使用布局</p>
+
+<p>$this->layout = "main"; //设置使用的布局文件</p>
+</blockquote>
+
+<ul>
+<li>方案3：视图中选择布局</li>
+</ul>
+
+<blockquote>
+  <p>$this->context->layout = false; //不使用布局</p>
+
+<p>$this->context->layout = 'main'; //设置使用的布局文件</p>
+</blockquote>
+
+</body>
+</html>
