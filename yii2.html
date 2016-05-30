@@ -265,5 +265,40 @@ $mail= Yii::$app-&gt;mailer-&gt;compose('xiaoma',['aa'=&gt;222]);
 <p>$this->context->layout = 'main'; //设置使用的布局文件</p>
 </blockquote>
 
+<h2>yii2 国际化</h2>
+
+<p>1 在配置文件 common/config/main-local.php配置文件中'components' => []添加一下内容：</p>
+
+<p><code>
+'i18n' =&gt; [
+    'translations' =&gt; [
+    'app*' =&gt; [
+    'class' =&gt; 'yii\i18n\PhpMessageSource',
+    'basePath' =&gt; '@common/messages',
+    //'sourceLanguage' =&gt; 'en-US',
+    /**
+    'fileMap' =&gt; [
+    'app' =&gt; 'app.php',
+    ],
+    */
+    ],
+    ],
+],
+</code></p>
+
+<p>2 在common文件下创建如下文件：</p>
+
+<blockquote>
+  <p>messages</p>
+
+<p>├── en-US</p>
+
+<p>│  └── app.php</p>
+
+<p>└── zh-CN</p>
+
+<p>│   └── app.php</p>
+</blockquote>
+
 </body>
 </html>

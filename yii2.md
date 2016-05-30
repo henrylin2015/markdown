@@ -217,3 +217,49 @@ $mail= Yii::$app->mailer->compose('xiaoma',['aa'=>222]);
 > $this->context->layout = false; //不使用布局
 
 > $this->context->layout = 'main'; //设置使用的布局文件
+
+## yii2 国际化
+
+1 在配置文件 common/config/main-local.php配置文件中'components' => []添加一下内容：
+
+`
+'i18n' => [
+    'translations' => [
+    'app*' => [
+    'class' => 'yii\i18n\PhpMessageSource',
+    'basePath' => '@common/messages',
+    //'sourceLanguage' => 'en-US',
+    /**
+    'fileMap' => [
+    'app' => 'app.php',
+    ],
+    */
+    ],
+    ],
+],
+`
+
+2 在公共加载文件中设置语言 如下：
+
+`
+Yii::$app->language = 'zh-cn';
+`
+
+3 在common文件下创建如下文件：
+
+> messages
+
+> ├── en-US
+
+> │  └── app.php
+
+> └── zh-CN
+
+> │   └── app.php
+
+
+4 在文件中调用如下：
+
+`
+<?= Yii::t('app','test'); ?>
+`
