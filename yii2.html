@@ -630,5 +630,14 @@ echo Nav::widget(
 
 <p><a href="http://www.manks.top/article/yii2_frame_rbac_template">原文件</a></p>
 
+<h2>yii2 在views中加载js文件的方法 如下：</h2>
+
+<p><code>
+/* @var $this yii\web\View */
+$this-&gt;title = 'Mrd Backend';
+//$this-&gt;registerJs("var _opts = {$opts};");
+$this-&gt;registerJs($this-&gt;render('_calendar.js'));
+</code></p>
+
 </body>
 </html>

@@ -573,3 +573,13 @@ echo Nav::widget(
 后面发现不是我们搭建的问题，是大家不会操作的问题啊，心塞有木有 [yii2 rbac权限控制详细操作步骤](http://www.manks.top/article/yii2_rbac_description)
 
 [原文件](http://www.manks.top/article/yii2_frame_rbac_template)
+
+
+## yii2 在views中加载js文件的方法 如下：
+
+```
+/* @var $this yii\web\View */
+$this->title = 'Mrd Backend';
+//$this->registerJs("var _opts = {$opts};");
+$this->registerJs($this->render('_calendar.js'));
+```
