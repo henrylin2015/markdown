@@ -583,3 +583,23 @@ $this->title = 'Mrd Backend';
 //$this->registerJs("var _opts = {$opts};");
 $this->registerJs($this->render('_calendar.js'));
 ```
+
+## 事务（Transaction）
+
+在Yii中，使用 yii\db\Transaction 来表示数据库事务。
+
+一般情况下，我们从数据库连接启用事务，通常采用如下的形式:
+
+```
+$transaction = $connection->beginTransaction();
+try {
+    $connection->createCommand($sql1)->execute();
+    $connection->createCommand($sql2)->execute();
+    // ... executing other SQL statements ...
+    $transaction->commit();
+} catch (Exception $e) {
+    $transaction->rollBack();
+}
+```
+
+在上面的代码中，先是获取一个 yii\db\Transaction 对象，之后执行若干SQL 语句，然后调用之前 Transaction 对象的 commit() 方法。这一过程中， 如果捕获了异常，那么调用 rollBack() 进行回滚。
