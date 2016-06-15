@@ -603,3 +603,11 @@ try {
 ```
 
 在上面的代码中，先是获取一个 yii\db\Transaction 对象，之后执行若干SQL 语句，然后调用之前 Transaction 对象的 commit() 方法。这一过程中， 如果捕获了异常，那么调用 rollBack() 进行回滚。
+
+
+
+## 获取登录用户名称
+
+```
+<?=Yii::$app->user->identity->username?>
+```
