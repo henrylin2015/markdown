@@ -21,6 +21,16 @@
   <p>'defaultRoute' => 'welcome' ,//(在config配置文件中$config下添加)</p>
 </blockquote>
 
+<h2>修改默认登录方法入口</h2>
+
+<p><code>
+'user' =&gt; [
+    'identityClass' =&gt; 'common\models\User',
+    'enableAutoLogin' =&gt; true,
+    'loginUrl'=&gt;array('login/index'),
+],
+</code></p>
+
 <h2>一些常用的文件类库</h2>
 
 <blockquote>

@@ -4,6 +4,17 @@
 ## 修改默认控制器
 > 'defaultRoute' => 'welcome' ,//(在config配置文件中$config下添加)
 
+## 修改默认登录方法入口
+
+```
+'user' => [
+    'identityClass' => 'common\models\User',
+    'enableAutoLogin' => true,
+    'loginUrl'=>array('login/index'),
+],
+```
+
+
 ## 一些常用的文件类库
 
 > yii\Helpers\Html;//这个类库 提供一些html格式文件输出
